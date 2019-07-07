@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jonas</groupId>
-    <artifactId>jalgo</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>jackal-algorithm</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
