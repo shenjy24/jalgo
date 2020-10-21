@@ -8,43 +8,71 @@ package com.jonas.number;
 public class NextPermutationNum {
 
     public int solve(int num) {
+        return solve(parseToArray(num));
+    }
+
+    public int solve(int[] nums) {
+        int index = findTransferPoint(nums);
+        if (0 == index) {
+            reverse(0, nums);
+            return parseToInt(nums);
+        }
+        exchangeHead(index, nums);
+        reverse(index, nums);
+        return parseToInt(nums);
+    }
+
+    public int findTransferPoint(int[] nums) {
+        for (int i = nums.length - 1; i > 0; i--) {
+            if (nums[i] > nums[i - 1]) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void exchangeHead(int index, int[] nums) {
+        int head = nums[index - 1];
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (head < nums[i]) {
+                nums[index - 1] = nums[i];
+                nums[i] = head;
+                return;
+            }
+        }
+    }
+
+    public void reverse(int index, int[] nums) {
+        int head = index;
+        int tail = nums.length - 1;
+        while (head < tail) {
+            int tmp = nums[head];
+            nums[head] = nums[tail];
+            nums[tail] = tmp;
+            head++;
+            tail--;
+        }
+    }
+
+    public int[] parseToArray(int num) {
         String str = String.valueOf(num);
-        int length = str.length();
-        int index = length - 1;
-        int last = Integer.parseInt(String.valueOf(str.charAt(length - 1)));
-        for (int i = length - 1; i > 0; i--) {
-            int current = Integer.parseInt(String.valueOf(str.charAt(i)));
-            if (current >= last) {
-                last = current;
-                index--;
-            } else {
-                break;
-            }
+        int[] tmp = new int[str.length()];
+        for (int i = 0; i < str.length(); i++) {
+            tmp[i] = Integer.parseInt(String.valueOf(str.charAt(i)));
         }
-        int before = Integer.parseInt(String.valueOf(str.charAt(index)));
-        String sub = str.substring(index + 1);
-        int subLength = sub.length();
-        int replaceIndex = 0;
+        return tmp;
+    }
 
-        int minGap = Integer.MAX_VALUE;
-        for (int i = 0; i < subLength - 1; i++) {
-            int current = Integer.parseInt(String.valueOf(sub.charAt(i)));
-            if (current > before && current - before < minGap) {
-                minGap = current - before;
-                replaceIndex = i;
-            }
+    public int parseToInt(int[] nums) {
+        int sum = 0;
+        for (int i = 0 ; i < nums.length; i++) {
+            sum = sum * 10 + nums[i];
         }
-
-        int replaceNum = Integer.parseInt(String.valueOf(sub.charAt(replaceIndex)));
-        StringBuilder result = new StringBuilder(str);
-        result.replace(index, index + 1, String.valueOf(replaceNum));
-        result.replace(index + replaceIndex + 1, index + replaceIndex + 2, String.valueOf(before));
-
-        return Integer.parseInt(result.toString());
+        return sum;
     }
 
     public static void main(String[] args) {
         NextPermutationNum app = new NextPermutationNum();
-        System.out.println(app.solve(2431));
+        System.out.println(app.solve(1));
     }
 }
